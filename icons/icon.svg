@@ -1,0 +1,11 @@
+<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 128 128'>
+  <!-- Background -->
+  <rect width='128' height='128' rx='28' fill='#4f46e5'/>
+  <!-- Scroll lines (top) -->
+  <rect x='32' y='34' width='64' height='8' rx='4' fill='white' opacity='0.5'/>
+  <rect x='32' y='50' width='44' height='8' rx='4' fill='white' opacity='0.5'/>
+  <!-- Down arrow shaft -->
+  <rect x='58' y='62' width='12' height='30' rx='6' fill='white'/>
+  <!-- Down arrow head -->
+  <polygon points='64,108 40,82 88,82' fill='white'/>
+</svg>
