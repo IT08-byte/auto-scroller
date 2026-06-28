@@ -1,0 +1,28 @@
+# OS
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Node (if build tooling added later)
+node_modules/
+npm-debug.log*
+dist/
+build/
+
+# Secrets
+.env
+.env.local
+.env.*.local
+*.pem
+*.key
+secrets.json
+credentials.json
+
+# Chrome extension packaging artifacts
+*.crx
+*.pem
