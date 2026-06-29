@@ -283,6 +283,9 @@
       return;
     }
 
+    // Only respond to scroll keybinds when the popup overlay is open
+    if (!document.getElementById('auto-scroller-overlay')) return;
+
     if (startKey === pauseKey && e.key === startKey) {
       e.preventDefault();
       scrolling ? pauseScroll() : startScroll();
