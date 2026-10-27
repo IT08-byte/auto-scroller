@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Privacy Policy — Auto Scroller</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: system-ui, -apple-system, sans-serif;
+      background: #0f0f1a;
+      color: #d0d0e0;
+      line-height: 1.7;
+      padding: 40px 20px;
+    }
+    .container { max-width: 720px; margin: 0 auto; }
+    h1 { color: #a78bfa; font-size: 2rem; margin-bottom: 6px; }
+    .subtitle { font-size: 0.9rem; opacity: 0.5; margin-bottom: 40px; }
+    h2 { color: #c4b5fd; font-size: 1.1rem; margin: 32px 0 10px; border-bottom: 1px solid #2d2d4e; padding-bottom: 6px; }
+    p { margin-bottom: 12px; opacity: 0.85; }
+    ul { margin: 8px 0 12px 20px; opacity: 0.85; }
+    li { margin-bottom: 6px; }
+    .badge {
+      display: inline-block; background: #1a3a1a; color: #4ade80;
+      border: 1px solid #4ade80; border-radius: 20px;
+      padding: 3px 12px; font-size: 0.8rem; font-weight: 600;
+      margin-bottom: 24px;
+    }
+    .contact-box {
+      background: #1a1a2e; border: 1px solid #2d2d4e; border-radius: 10px;
+      padding: 16px 20px; margin-top: 16px;
+    }
+    a { color: #a78bfa; }
+    footer { margin-top: 60px; font-size: 0.8rem; opacity: 0.35; text-align: center; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Privacy Policy</h1>
+    <p class="subtitle">Auto Scroller Chrome Extension &mdash; Effective date: June 25, 2026</p>
+
+    <div class="badge">✓ This extension collects zero personal data</div>
+
+    <h2>Overview</h2>
+    <p>Auto Scroller is a Chrome browser extension that enables users to automatically scroll web pages at a customizable speed using keyboard shortcuts. This policy explains what data the extension handles and how.</p>
+
+    <h2>Data We Collect</h2>
+    <p>Auto Scroller does <strong>not</strong> collect, transmit, store on any server, or share any personal data or user information whatsoever. Specifically:</p>
+    <ul>
+      <li>No personally identifiable information (PII)</li>
+      <li>No browsing history or visited URLs</li>
+      <li>No page content or web activity</li>
+      <li>No authentication credentials</li>
+      <li>No location data</li>
+      <li>No device identifiers</li>
+    </ul>
+
+    <h2>Local Preferences Storage</h2>
+    <p>The extension saves your preferences (scroll speed, keybind keys, overlay scale, and auto-popup setting) using <code>chrome.storage.sync</code>. This is Chrome's built-in extension storage, which:</p>
+    <ul>
+      <li>Stores data locally in your Chrome profile</li>
+      <li>May sync across your own signed-in Chrome devices via your Google Account — this sync is managed entirely by Google and subject to <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">Google's Privacy Policy</a></li>
+      <li>Is never accessible to websites you visit</li>
+      <li>Is never sent to any server we operate</li>
+    </ul>
+    <p>The only data stored is: scroll speed (a number), start key name, pause key name, overlay scale (a number), and whether auto-popup is enabled (true/false). No URLs, page content, or personal details are ever stored.</p>
+
+    <h2>Permissions Explained</h2>
+    <p>The extension requests the following Chrome permissions:</p>
+    <ul>
+      <li><strong>activeTab</strong> — allows the extension icon to send a message to the currently active tab when clicked, to show or hide the overlay. No tab data is read or stored.</li>
+      <li><strong>storage</strong> — allows saving your preferences (speed, keybinds, scale) using Chrome's built-in storage. See above.</li>
+    </ul>
+    <p>The extension also injects a content script into all web pages (<code>&lt;all_urls&gt;</code>) so that the scrolling overlay and keyboard shortcuts function on any site you choose to use it on. This script only performs scrolling actions when you activate it — it does not read, record, or transmit any page content.</p>
+
+    <h2>Third-Party Services</h2>
+    <p>Auto Scroller does not integrate with, communicate with, or send data to any third-party services, analytics platforms, advertising networks, or data brokers.</p>
+
+    <h2>Data Security</h2>
+    <p>Because no personal data is collected or transmitted, there is no personal data at risk. Preferences stored via <code>chrome.storage.sync</code> are handled by Chrome's secure extension storage mechanism.</p>
+
+    <h2>Children's Privacy</h2>
+    <p>Auto Scroller does not collect any data from anyone, including children under the age of 13. The extension is a simple scrolling utility with no accounts, sign-ups, or data collection of any kind.</p>
+
+    <h2>Changes to This Policy</h2>
+    <p>If this privacy policy is ever updated, the new version will be posted at this URL with an updated effective date. Because the extension collects no data, material changes are unlikely.</p>
+
+    <h2>Contact</h2>
+    <div class="contact-box">
+      <p>If you have any questions about this privacy policy or the extension, please reach out via the Chrome Web Store listing page or open an issue on the <a href="https://github.com/IT08-byte/auto-scroller-privacy" target="_blank" rel="noopener noreferrer">GitHub repository</a>.</p>
+    </div>
+
+    <footer>
+      &copy; 2026 Auto Scroller. This extension is provided as-is for personal use.
+    </footer>
+  </div>
+</body>
+</html>
