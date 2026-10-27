@@ -178,6 +178,8 @@
       v:{'--asc-bg':'#e8f0f8','--asc-sf':'#d8e8f4','--asc-br':'#a0c4e0','--asc-tx':'#0f172a','--asc-ac':'#3b82f6','--asc-bt':'#2563eb','--asc-bh':'#3b82f6','--asc-sh':'0 4px 20px rgba(59,130,246,.15)','--asc-bd':'none'},
       p:{img:'repeating-linear-gradient(30deg,rgba(59,130,246,.1) 0 1px,transparent 1px 16px),repeating-linear-gradient(150deg,rgba(59,130,246,.1) 0 1px,transparent 1px 16px),repeating-linear-gradient(90deg,rgba(59,130,246,.06) 0 1px,transparent 1px 16px),radial-gradient(circle,rgba(255,255,255,.8) 1px,transparent 1px)',size:'16px 28px,16px 28px,16px 28px,40px 28px'}},
   ];
+  // Derived from THEMES so new animations (blink, float, …) are always cleaned up on theme switch
+  const ANIM_CLASSES = [...new Set(THEMES.map(t => t.p && t.p.anim).filter(Boolean))];
 
   // ─── Defaults ────────────────────────────────────────────────────────────
   const DEFAULTS = {
@@ -243,7 +245,7 @@
     const overlay = document.getElementById('auto-scroller-overlay');
     if (!overlay) return;
     // Remove animation classes before switching themes
-    overlay.classList.remove('asc-anim-scan','asc-anim-aurora','asc-anim-holo','asc-anim-wave','asc-anim-drift','asc-anim-flow','asc-anim-shimmer');
+    overlay.classList.remove(...ANIM_CLASSES);
     // Apply colour vars
     Object.entries(t.v).forEach(([k, v]) => overlay.style.setProperty(k, v));
     const bd = t.v['--asc-bd'] || 'none';
@@ -282,6 +284,10 @@
       if (btn) btn.blur();
       return;
     }
+
+    // Never hijack keys while the user is typing (search boxes, comment fields, etc.)
+    const t = e.target;
+    if (t && (t.isContentEditable || /^(INPUT|TEXTAREA|SELECT)$/.test(t.tagName))) return;
 
     // Only respond to scroll keybinds when the popup overlay is open
     if (!document.getElementById('auto-scroller-overlay')) return;
@@ -624,14 +630,18 @@
 
     document.getElementById('asc-privacy-link').href = 'https://IT08-byte.github.io/auto-scroller-privacy/';
 
+    // One controller tears down every document-level listener this overlay adds
+    // (hover tracking + drag), so reopening the overlay never stacks stale handlers.
+    const ac = new AbortController();
+
     overlay.__ascRemove = () => {
       pauseScroll();
-      document.removeEventListener('mousemove', onMouseMove, { capture: true });
+      ac.abort();
       overlay.remove();
       style.remove();
     };
 
-    document.addEventListener('mousemove', onMouseMove, { passive: true, capture: true });
+    document.addEventListener('mousemove', onMouseMove, { passive: true, capture: true, signal: ac.signal });
 
     // Controls
     document.getElementById('asc-toggle-btn').addEventListener('click', () =>
@@ -677,6 +687,10 @@
       pauseKey  = DEFAULTS.pauseKey;
       autoPopup = DEFAULTS.autoPopup;
       scale     = DEFAULTS.scale;
+      // Cancel any pending keybind capture, otherwise the next keypress overwrites the reset key
+      capturingFor = null;
+      startKeyBtn().classList.remove('capturing');
+      pauseKeyBtn().classList.remove('capturing');
       storageClear();
       document.getElementById('asc-speed').value        = speed;
       startKeyBtn().textContent                          = startKey;
@@ -703,8 +717,8 @@
       overlay.style.right = 'auto';
       overlay.style.left = (e.clientX - dragOffX) + 'px';
       overlay.style.top  = (e.clientY - dragOffY) + 'px';
-    });
-    document.addEventListener('mouseup', () => { dragging = false; });
+    }, { signal: ac.signal });
+    document.addEventListener('mouseup', () => { dragging = false; }, { signal: ac.signal });
 
     // Close
     document.getElementById('asc-close').addEventListener('click', () => overlay.__ascRemove());
@@ -723,13 +737,16 @@
 
   // ─── Init ────────────────────────────────────────────────────────────────
   async function init() {
-    const saved = await storageGet(['speed', 'startKey', 'pauseKey', 'autoPopup', 'scale', 'theme']);
-    if (saved.speed     !== undefined) speed     = saved.speed;
-    if (saved.startKey  !== undefined) startKey  = saved.startKey;
-    if (saved.pauseKey  !== undefined) pauseKey  = saved.pauseKey;
-    if (saved.autoPopup !== undefined) autoPopup = saved.autoPopup;
-    if (saved.scale     !== undefined) scale     = saved.scale;
-    if (saved.theme     !== undefined) theme     = saved.theme;
+    const s = await storageGet(['speed', 'startKey', 'pauseKey', 'autoPopup', 'scale', 'theme']);
+    // Storage was page-writable via the bridge before 1.2.1 — never trust its types.
+    // Bad values fall back to DEFAULTS instead of crashing the overlay (e.g. scale.toFixed).
+    const isKey = v => typeof v === 'string' && v.length >= 1 && v.length <= 32;
+    if (Number.isFinite(s.speed))           speed     = Math.min(100, Math.max(1, s.speed));
+    if (isKey(s.startKey))                  startKey  = s.startKey;
+    if (isKey(s.pauseKey))                  pauseKey  = s.pauseKey;
+    if (typeof s.autoPopup === 'boolean')   autoPopup = s.autoPopup;
+    if (Number.isFinite(s.scale))           scale     = Math.min(2, Math.max(0.5, s.scale));
+    if (THEMES.some(t => t.id === s.theme)) theme     = s.theme;
 
     if (autoPopup) buildOverlay();
   }

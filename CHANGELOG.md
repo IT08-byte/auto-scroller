@@ -2,6 +2,29 @@
 
 All notable changes to Auto Scroller are documented here.
 
+## [1.2.1] — 2026-10-21
+
+### Fixed
+- Switching themes left `asc-anim-blink` / `asc-anim-float` classes behind (animation cleanup list now derived from THEMES)
+- Start/pause keybinds fired while typing in inputs, textareas, selects, and contentEditable fields
+- Document `mousemove`/`mouseup` listeners leaked on every overlay open (now torn down via AbortController)
+- Malformed stored settings (wrong types, NaN, unknown theme) could crash the overlay — now validated and clamped on load
+- Page scripts could write arbitrary keys to extension storage through the bridge — writes now whitelisted to settings keys; storage errors handled
+- Pressing Reset during keybind capture let the next keypress overwrite the reset value
+
+## [1.2] — 2026-06-28
+
+### Added
+- `asc-blink` and `asc-float` animations (Galaxy, Firefly, Sakura)
+- GitHub trust files: SECURITY, CONTRIBUTING, issue/PR templates, Dependabot, CODEOWNERS
+
+### Fixed
+- Matcha theme pattern (removed misplaced pink/orange dots)
+- `background.js` no longer throws on chrome:// and about: pages
+
+### Changed
+- Keybinds only active while the overlay is open
+
 ## [1.1] — 2026-06-28
 
 ### Added
